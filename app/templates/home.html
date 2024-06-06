@@ -1,5 +1,25 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
 %}
 
-<h1>Test</h1>
+<hr>
+<h2>{{text}}</h2>
+<h3>{{author}}</h3>
+
+<hr>
+<h2>{{textAnswer}}</h2>
+<h3>{{authorAnswer}}</h3>
+
+<form action="" method="post">
+  <label for="text">Quote</label>
+  <input type="text" name="text" required>
+  <label for="author">Author</label>
+  <input type="text" name="author" required>
+  <input type="submit" name="submit" value="Submit">
+</form>
+
+<hr>
+<h2>Result</h2>
+<p>{{result}}<p>
+
+
 {% endblock %}

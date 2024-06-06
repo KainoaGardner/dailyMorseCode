@@ -4,3 +4,5 @@ CREATE TABLE IF NOT EXISTS text (
   author VARCHAR(50)
 );
 
+
+ALTER SEQUENCE text_id_seq RESTART WITH 1;
