@@ -2,7 +2,11 @@
 %}
 
 <h1>Admin</h1>
-
-{% for entry in entries %}
-<p>{{entry}}</p>
-{% endfor %} {% endblock %}
+<a class="nav" href="{{ url_for('emptyUsers') }}">Empty Users</a>
+{% for user in all_users %}
+<p>{{user.username}}</p>
+<p>{{user.password}}</p>
+<p>{{user.registerDate}}</p>
+<hr>
+{% endfor %}
+{% endblock %}

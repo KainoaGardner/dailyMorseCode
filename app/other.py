@@ -1,17 +1,7 @@
 from flask import session
 from datetime import date
 
-from app.db import *
 from app.morse import letterToMorse, morseToLetter
-
-
-def getDBSize():
-    with db_cursor() as cur:
-
-        cur.execute(f"SELECT count(*) AS exact_count FROM text;")
-        size = cur.fetchone()
-
-        return size[0]
 
 
 def getTodayIndex():
@@ -23,15 +13,6 @@ def getTodayIndex():
 
     number = year * 365 + month * 12 * day
     return number
-
-
-def getEntry(index):
-    with db_cursor() as cur:
-
-        cur.execute(f"SELECT text,author FROM text WHERE id = '{index}';")
-        entry = cur.fetchone()
-
-        return entry
 
 
 def encrypt(text):
