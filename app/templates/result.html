@@ -1,0 +1,14 @@
+{% extends "base.html" %} {% block css %} {% endblock %} {% block title
+%}Result{% endblock %} {% block content %}
+<h1>Correct</h1>
+<h2>Quote</h2>
+<p>{{quote["quote"]["text"]}}</p>
+<p>{{quote["quote"]["author"]}}</p>
+<hr />
+<p>{{quote["encrypt"]["text"]}}</p>
+<p>{{quote["encrypt"]["author"]}}</p>
+
+<!-- <form action="" method="post"> -->
+<!--   <input type="submit" name="continue" value="Continue" /> -->
+<!-- </form> -->
+{% endblock %}

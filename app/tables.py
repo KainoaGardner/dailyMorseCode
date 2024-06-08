@@ -23,8 +23,10 @@ class Answer(db.Model):
     answer_id = db.Column(db.ForeignKey("quote.id"))
     user_id = db.Column(db.ForeignKey("users.id"))
 
-    def __init__(self, date):
+    def __init__(self, date, answer_id, user_id):
         self.date = date
+        self.answer_id = answer_id
+        self.user_id = user_id
 
 
 class Quote(db.Model):

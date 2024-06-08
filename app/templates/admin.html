@@ -3,10 +3,29 @@
 
 <h1>Admin</h1>
 <a class="nav" href="{{ url_for('emptyUsers') }}">Empty Users</a>
+<h2>Users</h2>
 {% for user in all_users %}
 <p>{{user.username}}</p>
 <p>{{user.password}}</p>
 <p>{{user.registerDate}}</p>
+<p>{{user.id}}</p>
 <hr>
 {% endfor %}
+
+<h2>Answers</h2>
+{% for answer in all_answers %}
+<p>{{answer.date}}</p>
+<p>{{answer.answer_id}}</p>
+<p>{{answer.user_id}}</p>
+<hr>
+{% endfor %}
+
+
+<h2>Quotes</h2>
+{% for quote in all_quotes %}
+<p>{{quote.text}}</p>
+<p>{{quote.author}}</p>
+<hr>
+{% endfor %}
+
 {% endblock %}

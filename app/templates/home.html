@@ -1,25 +1,46 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content
+{% extends "base.html" %} {% block title %}Home{% endblock %} 
+{% block css %}
+<link rel="stylesheet" href="static/play.css">
+{% endblock %}
+
+{% block content
 %}
+
 
 <hr>
 <h2>{{text}}</h2>
 <h3>{{author}}</h3>
 
 <hr>
-<h2>{{textAnswer}}</h2>
-<h3>{{authorAnswer}}</h3>
 
-<form action="" method="post">
-  <label for="text">Quote</label><br>
-  <input type="text" name="text" required><br>
-  <label for="author">Author</label><br>
-  <input type="text" name="author" required><br>
-  <input type="submit" name="submit" value="Submit">
+
+<form class="input" action="" method="post">
+  {% if input %}
+  <div class="input_element">
+    <label class="input_text" for="text" >Quote</label><br>
+  <input class="input_input" type="text" name="text" value="{{input['quote']}}" required><br>
+  </div>
+  <div class="input_element">
+  <label class="input_text" for="author" >Author</label><br>
+  <input class="input_input" type="text" name="author" value="{{input['author']}}" required><br>
+  </div>
+  {% else %}
+  <div class="input_element">
+  <label class="input_text" for="text">Quote</label><br>
+  <input class="input_input" type="text" name="text" required><br>
+  </div>
+  <div class="input_element">
+  <label class="input_text" for="author">Author</label><br>
+  <input class="input_input" type="text" name="author" required><br>
+  </div>
+  {% endif %}
+  <input class="input_submit" type="submit" name="submit" value="Submit">
+  
 </form>
 
 <hr>
-<h2>Result</h2>
-<p>{{result}}<p>
 
+<h2>{{textAnswer}}</h2>
+<h3>{{authorAnswer}}</h3>
 
 {% endblock %}
