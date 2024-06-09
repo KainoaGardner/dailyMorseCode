@@ -1,5 +1,5 @@
 from flask import session
-from datetime import date
+from datetime import date, timedelta
 
 from app.morse import letterToMorse, morseToLetter
 
@@ -38,3 +38,23 @@ def decrypt(text):
         result += " "
 
     return result[:-1]
+
+
+def get_streak(answers):
+    temp_date = date.today()
+    days_in_row = 0
+    check = True
+    while check:
+        found = False
+        for answer in answers:
+            print(temp_date, answer[0], temp_date)
+            if answer[0] == temp_date:
+                days_in_row += 1
+                temp_date -= timedelta(1)
+                found = True
+                break
+
+        if not found:
+            check = False
+
+    return days_in_row

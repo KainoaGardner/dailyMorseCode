@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block css %} {% endblock %} {% block title
+%}Convert{% endblock %} {% block content %} {% with messages =
+get_flashed_messages() %} {% if messages %} {% for message in messages %}
+<p class="error">{{message}}</p>
+{% endfor %} {% endif %}{% endwith %}
+
+<hr />
+<h2>Convert</h2>
+{% if convert_type == 0 %}
+<h2>Letter to Morse</h2>
+{% else %}
+<h2>Morse to Letter</h2>
+{% endif %}
+<form action="" method="post">
+  <input type="submit" name="convert_type" value="Switch" />
+</form>
+
+<form action="" method="post">
+  <input type="text" name="convert_text" value="{{convert_input}}" required />
+  <input type="submit" name="convert_submit" value="Convert" />
+</form>
+
+<p>{{converted}}</p>
+
+{% endblock %}

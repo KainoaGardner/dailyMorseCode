@@ -1,10 +1,10 @@
 from flask import redirect, url_for, render_template, flash, session, request
 from sqlalchemy import select
-from datetime import date, timedelta
+from datetime import date, datetime
 from app import app, db
 from app.tables import User, Quote, Answer
 from app.quotes import quotes
-from app.other import getTodayIndex, encrypt, decrypt
+from app.other import getTodayIndex, encrypt, decrypt, get_streak
 
 
 @app.route("/setup_home")
@@ -148,18 +148,74 @@ def user():
 
     user = session["user"]
 
-    answered = Answer.query.filter_by(user_id=user["id"]).all()
+    answered = (
+        Answer.query.with_entities(Answer.date).filter_by(user_id=user["id"]).all()
+    )
 
-    temp_date = date.today()
-    days_in_row = 0
-    while temp_date in answered:
-        days_in_row += 1
-        temp_date = date.today() - timedelta(1)
+    user_db = User.query.filter_by(username=user["username"]).first()
+    days_in_row = get_streak(answered)
+    user_db.answers_in_row = max(days_in_row, user_db.answers_in_row)
+    db.session.commit()
 
     total_answered = len(answered)
 
     return render_template(
-        "user.html", user=user, total_answered=total_answered, days_in_row=days_in_row
+        "user.html",
+        user=user,
+        total_answered=total_answered,
+        days_in_row=days_in_row,
+        max_day_in_row=user_db.answers_in_row,
+    )
+
+
+@app.route("/setup_convert")
+def setup_convert():
+    session.pop("convert_input", None)
+    session.pop("convert_type", None)
+    session.pop("converted", None)
+    return redirect(url_for("convert"))
+
+
+@app.route("/convert", methods=["GET", "POST"])
+def convert():
+    if "convert_type" not in session:
+        session["convert_type"] = 0
+
+    if request.method == "POST":
+        if "convert_type" in request.form:
+            if session["convert_type"] == 0:
+                session["convert_type"] = 1
+            else:
+                session["convert_type"] = 0
+            session.pop("convert_input", None)
+            return redirect(url_for("convert"))
+
+        elif "convert_submit" in request.form:
+            text = request.form["convert_text"]
+            if session["convert_type"] == 0:
+                result = encrypt(text)
+            else:
+                result = decrypt(text)
+
+            session["converted"] = result
+            session["convert_input"] = text
+            return redirect(url_for("convert"))
+
+    if "converted" in session:
+        converted = session["converted"]
+    else:
+        converted = ""
+
+    if "convert_input" in session:
+        convert_input = session["convert_input"]
+    else:
+        convert_input = ""
+
+    return render_template(
+        "convert.html",
+        converted=converted,
+        convert_type=session["convert_type"],
+        convert_input=convert_input,
     )
 
 
@@ -171,9 +227,9 @@ def test():
 @app.route("/admin")
 def admin():
 
-    all_users = user.query.all()
-    all_answers = answer.query.all()
-    all_quotes = quote.query.all()
+    all_users = User.query.all()
+    all_answers = Answer.query.all()
+    all_quotes = Quote.query.all()
 
     return render_template(
         "admin.html",
@@ -204,6 +260,6 @@ def resetstats():
 
 @app.route("/emptyusers")
 def emptyusers():
-    db.session.query(user).delete()
+    db.session.query(User).delete()
     db.session.commit()
     return redirect(url_for("admin"))
