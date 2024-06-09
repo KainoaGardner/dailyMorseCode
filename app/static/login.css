@@ -1,0 +1,32 @@
+.login_body {
+  background-color: #ffffff;
+  border: solid;
+  border-color: #121212;
+  padding: 10px 10px;
+}
+
+.input_text {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.input_bar {
+  padding: 5px 5px;
+  margin: 5px 0;
+  margin-bottom: 10px;
+  border: solid;
+  border-width: 1px;
+  background-color: #ecf0f1;
+}
+
+.input_submit {
+  font-size: 15px;
+  font-weight: bold;
+  color: #121212;
+  background-color: #ecf0f1;
+  border: solid;
+  border-width: 1px;
+  padding: 5px 5px;
+  margin: 5px 5;
+  width: 100px;
+}

@@ -64,6 +64,7 @@ def home():
     else:
         input = None
 
+    today_date = date.today()
     return render_template(
         "home.html",
         text=text,
@@ -72,13 +73,30 @@ def home():
         authorAnswer=authorAnswer,
         result=result,
         input=input,
+        date=today_date,
     )
 
 
 @app.route("/answered")
 def answered():
+    if "quote" not in session:
+
+        dbSize = db.session.query(Quote).count()
+        todayIndex = getTodayIndex()
+        todayIndex = todayIndex % dbSize
+
+        entry = Quote.query.get(todayIndex)
+        text = encrypt(entry.text)
+        author = encrypt(entry.author)
+        session["quote"] = {
+            "quote": {"text": entry.text, "author": entry.author},
+            "encrypt": {"text": text, "author": author},
+        }
+
     quote = session["quote"]
-    return render_template("answered.html", quote=quote)
+    today_date = date.today()
+
+    return render_template("answered.html", quote=quote, date=today_date)
 
 
 @app.route("/result", methods=["GET", "POST"])
@@ -188,6 +206,7 @@ def convert():
             else:
                 session["convert_type"] = 0
             session.pop("convert_input", None)
+            session.pop("converted", None)
             return redirect(url_for("convert"))
 
         elif "convert_submit" in request.form:
